@@ -1,0 +1,18 @@
+function D = DSDir(f,theta,phi,d,N) 
+%% convert to column vectors
+f = f(:);
+N = N(:);
+theta = theta(:);
+
+%% align the vectors with their respective dimensions
+N = permute(N,[3,2,1]);
+f = permute(f,[2,1]);
+
+%% replicate the vectors to facilitate vectorized calculations
+N = repmat(N,[size(theta,1),size(f,2),1]);
+f = repmat(f,[size(theta,1),1,size(N,3)]);
+
+
+%% calculate the directivity pattern
+D = sum(exp(2*pi*d*f.*(N - 1).*(cos(theta) - cos(phi))/c), 3);
+end
